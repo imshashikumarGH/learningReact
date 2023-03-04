@@ -11,29 +11,39 @@ const Login = (props) => {
   const [passwordIsValid, setPasswordIsValid] = useState();
   const [formIsValid, setFormIsValid] = useState(false);
 
+  //Q 1) work for every keystrock 
+  // useEffect(() => {
+  //   setFormIsValid(
+  //     enteredEmail.includes('@') && enteredPassword.trim().length > 6
+  //   );
+  // }, [enteredEmail, enteredPassword] )
+
+  //Solution 1) using timmer and resetting on every keystock 
+  useEffect(() => {
+    const identifier = setTimeout(() => {
+      console.log("validating code with some delay after user stop typing");
+      setFormIsValid(
+        enteredEmail.includes("@") && enteredPassword.trim().length > 6
+      );
+    }, 500);
+
+    return () => {
+      console.log("Cleanup");
+      clearTimeout(identifier);
+    };
+  }, [enteredEmail, enteredPassword]);
 
   const emailChangeHandler = (event) => {
     setEnteredEmail(event.target.value);
-
-    setFormIsValid(
-      enteredEmail.includes('@') && enteredPassword.trim().length > 6
-    );
   };
 
   const passwordChangeHandler = (event) => {
     setEnteredPassword(event.target.value);
-
-    setFormIsValid(
-      enteredEmail.includes('@') && e.trim().length > 6
-    );
   };
 
   const validateEmailHandler = () => {
     setEmailIsValid(enteredEmail.includes("@"));
-
-    
   };
-
 
   const validatePasswordHandler = () => {
     setPasswordIsValid(enteredPassword.trim().length > 6);
