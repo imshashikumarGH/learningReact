@@ -52,14 +52,14 @@ const Login = (props) => {
     };
   }, []);
 
-  const {isValid : emailIsVaild } = emailState;
+  const {isValid : emailIsValid } = emailState;
   const {isValid : passwordIsValid} = passwordState;
 
   useEffect(() => {
     const identifier = setTimeout(() => {
       console.log("Checking validating ");
       setFormIsValid(
-        emailIsVaild && passwordIsValid
+        emailIsValid && passwordIsValid
       );
     }, 500);
 
@@ -67,7 +67,7 @@ const Login = (props) => {
       console.log("Cleanup");
       clearTimeout(identifier);
     };
-  }, [emailIsVaild, passwordIsValid]);
+  }, [emailIsValid, passwordIsValid]);
 
 
   const emailChangeHandler = (event) => {
