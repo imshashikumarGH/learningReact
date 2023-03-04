@@ -11,18 +11,18 @@ import Button from "../UI/Button/Button";
     if(action.type==='USER_INPUT'){
       return { value: action.val, isValid: action.val.includes("@") };
     }
-    if(action.val === 'INPUt_BLUR'){
-      return { value: state.val, isValid: state.val.includes("@") };
+    if(action.type === 'INPUT_BLUR'){
+      return { value: state.value, isValid: state.value.includes("@") };
     }
     return { value: "", isValid: false };
   };
 
   const passwordReducer = (state, action) => {
     if(action.type==='USER_INPUT'){
-      return { value: action.val, isValid: action.val.trim().length>6) };
+      return { value: action.val, isValid: action.val.trim().length>6 };
     }
-    if(action.val === 'INPUt_BLUR'){
-      return { value: state.val, isValid: state.val.trim().length>6 };
+    if(action.type === 'INPUT_BLUR'){
+      return { value: state.value, isValid: state.value.trim().length>6 };
     }
     return { value: "", isValid: false };
   };
@@ -42,6 +42,15 @@ const Login = (props) => {
     value: "",
     isValid: null,
   });
+
+  
+  useEffect(() => {
+    console.log('EFFECT RUNNING');
+
+    return () => {
+      console.log('EFFECT CLEANUP');
+    };
+  }, []);
 
   const {isValid : emailIsVaild } = emailState;
   const {isValid : passwordIsValid} = passwordState;
@@ -90,7 +99,7 @@ const Login = (props) => {
 
   const submitHandler = (event) => {
     event.preventDefault();
-    props.onLogin(emailState.value, emailState.value);
+    props.onLogin(emailState.value, passwordState.value);
   };
 
   return (
@@ -112,7 +121,7 @@ const Login = (props) => {
         </div>
         <div
           className={`${classes.control} ${
-            passwordState.isValid ? classes.invalid : ""
+            passwordState.isValid === false ? classes.invalid : ""
           }`}
         >
           <label htmlFor="password">Password</label>
