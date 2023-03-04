@@ -29,39 +29,53 @@ import Button from "../UI/Button/Button";
 
 
 const Login = (props) => {
-  const [enteredPassword, setEnteredPassword] = useState('');
-  const [passwordIsValid, setPasswordIsValid] = useState();
   const [formIsValid, setFormIsValid] = useState(false);
 
-
-  //Note : To manage both email value and validity in on state usin
+  //Note : To manage both email value and validity in on state using reducer
   const [emailState, dispatchEmail] = useReducer(emailReducer, {
     value: "",
     isValid: null,
   });
 
+  //Note : To manage both password value and validity in on state using reducer
   const [passwordState, dispatchPassword] = useReducer(passwordReducer, {
     value: "",
     isValid: null,
   });
 
 
-  
+  useEffect(() => {
+    const identifier = setTimeout(() => {
+      console.log("validating code with some delay after user stop typing");
+      setFormIsValid(
+        emailState.isValid && passwordState.isValid
+      );
+    }, 500);
+
+    return () => {
+      console.log("Cleanup");
+      clearTimeout(identifier);
+    };
+  }, [enteredEmail, enteredPassword]);
+
+
   const emailChangeHandler = (event) => {
     dispatchEmail({type: 'USER_INPUT', val:event.target.value})
 
-    setFormIsValid(
-      event.target.value.includes("@") && passwordState.isValid
-    );
+    //this is Still not optimal as passwordState may give not latest value Shduled update in react 
+    // setFormIsValid(
+    //   event.target.value.includes("@") && passwordState.isValid
+    // );
   };
 
   
   const passwordChangeHandler = (event) => {
     dispatchPassword({type: 'USER_INPUT', val:event.target.value})
 
-    setFormIsValid(
-      event.target.value.trim().length > 6 && emailState.isValid
-    );
+    //this is Still not optimal as passwordState may give not latest value Shduled update in react 
+    // setFormIsValid(
+    //   event.target.value.trim().length > 6 && emailState.isValid
+    // );
   };
 
   const validateEmailHandler = () => {
