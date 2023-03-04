@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useReducer } from "react";
 
 import Card from "../UI/Card/Card";
 import classes from "./Login.module.css";
@@ -43,12 +43,14 @@ const Login = (props) => {
     isValid: null,
   });
 
+  const {isValid : emailIsVaild } = emailState;
+  const {isValid : passwordIsValid} = passwordState;
 
   useEffect(() => {
     const identifier = setTimeout(() => {
-      console.log("validating code with some delay after user stop typing");
+      console.log("Checking validating ");
       setFormIsValid(
-        emailState.isValid && passwordState.isValid
+        emailIsVaild && passwordIsValid
       );
     }, 500);
 
@@ -56,7 +58,7 @@ const Login = (props) => {
       console.log("Cleanup");
       clearTimeout(identifier);
     };
-  }, [enteredEmail, enteredPassword]);
+  }, [emailIsVaild, passwordIsValid]);
 
 
   const emailChangeHandler = (event) => {
