@@ -4,9 +4,10 @@ import { useState } from "react";
 
 function App() {
   const [movieList, setMovieList] = useState([]);
-
+  const [isLoading,setIsloading] = useState(false)
 
   async function fetchMovieHandler() {
+    setIsloading(true)
     const response = await fetch("https://swapi.dev/api/films");
     const data = await response.json();
     const movies = data.results.map((movieData) => {
@@ -16,6 +17,7 @@ function App() {
       };
     });
     setMovieList(movies);
+    setIsloading(false)
   }
 
   return (
@@ -24,7 +26,9 @@ function App() {
         <button onClick={fetchMovieHandler}>Fetch deatils</button>
         </section>
         <section>
-        <Movie movieList={movieList} />
+        {!isLoading && movieList.length >= 0 && <Movie movieList={movieList} />}
+        {!isLoading &&  movieList.length === 0 && <p>No movie deatils... </p>}
+        {isLoading && <p>Loading... </p>}
       </section>
     </>
   );
