@@ -1,14 +1,15 @@
 import Movie from "./component/Movie";
 import "./App.css";
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 function App() {
   const [movieList, setMovieList] = useState([]);
   const [isLoading, setIsloading] = useState(false);
   const [error, setError] = useState(null);
 
-  async function fetchMovieHandler() {
+  const fetchMovieHandler = useCallback( async () => { 
     setIsloading(true);
+    setError(null);
     try {
       const response = await fetch("https://swapi.dev/api/films");
       if (!response.ok) {
@@ -26,7 +27,11 @@ function App() {
       setError(error.message);
     }
     setIsloading(false);
-  }
+  }, []);
+
+  useEffect(() => {
+    fetchMovieHandler();
+  }, [fetchMovieHandler]);
 
   return (
     <>
@@ -35,7 +40,9 @@ function App() {
       </section>
       <section>
         {!isLoading && movieList.length >= 0 && <Movie movieList={movieList} />}
-        {!isLoading && movieList.length === 0 && !error && <p>No movie deatils... </p>}
+        {!isLoading && movieList.length === 0 && !error && (
+          <p>No movie deatils... </p>
+        )}
         {!isLoading && error && <p>{error}</p>}
         {isLoading && <p>Loading... </p>}
       </section>
